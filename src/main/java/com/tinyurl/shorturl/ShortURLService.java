@@ -57,7 +57,7 @@ public class ShortURLService {
             shortURL.setCustomized(true);
             return shortURLRepository.save(shortURL);
         } else {
-            throw new Exception("Alias already exists");
+            throw new Exception("Alias is not available");
         }
     }
 
@@ -77,7 +77,7 @@ public class ShortURLService {
             createClick(urlKey);
             return shortURL.getRedirectLink();
         } else {
-            throw new Exception("URL does not exist");
+            throw new Exception("URL not found");
         }
     }
 

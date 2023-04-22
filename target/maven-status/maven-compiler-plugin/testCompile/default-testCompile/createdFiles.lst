@@ -1,0 +1,3 @@
+com\tinyurl\TinyurlApplicationTests.class
+com\tinyurl\security\users\UserControllerTest.class
+com\tinyurl\shorturl\ShortURLControllerTest.class
