@@ -6,4 +6,3 @@ RUN apk add --no-cache fontconfig ttf-dejavu
 VOLUME /tmp
 COPY target/*.jar tinyurl.jar
 ENTRYPOINT ["java","-jar","/tinyurl.jar"]
-EXPOSE 8080
