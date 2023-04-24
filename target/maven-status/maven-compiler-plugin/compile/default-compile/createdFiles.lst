@@ -2,6 +2,7 @@ com\tinyurl\security\users\UserRepository.class
 com\tinyurl\security\users\User.class
 com\tinyurl\core\data\BaseEntityListener.class
 com\tinyurl\TinyurlApplication.class
+com\tinyurl\core\data\Paging.class
 com\tinyurl\core\data\BaseEntity.class
 com\tinyurl\security\jwt\JwtUtil.class
 com\tinyurl\shorturl\ShortURLRepository.class
@@ -9,6 +10,7 @@ com\tinyurl\security\config\SecurityConfig.class
 com\tinyurl\core\data\MessageType.class
 com\tinyurl\core\data\Message.class
 com\tinyurl\ErrorControllerAdvice.class
+com\tinyurl\core\data\PageSearch.class
 com\tinyurl\shorturl\ShortURLService.class
 com\tinyurl\core\data\AuditDetails.class
 com\tinyurl\security\jwt\JwtSubject.class
@@ -26,7 +28,5 @@ com\tinyurl\shorturl\ShortURLController.class
 com\tinyurl\security\auth\AuthRequest.class
 com\tinyurl\security\users\UserService.class
 com\tinyurl\security\auth\BizAuthentication.class
-com\tinyurl\click\Click.class
 com\tinyurl\shorturl\ShortURL.class
 com\tinyurl\security\auth\AuthResponse.class
-com\tinyurl\click\ClickRepository.class

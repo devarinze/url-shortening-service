@@ -1,13 +1,12 @@
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\security\users\User.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\security\auth\AuthManager.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\shorturl\ShortURL.java
-C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\click\ClickRepository.java
-C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\click\Click.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\security\users\UserService.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\security\auth\AuthService.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\shorturl\ShortURLController.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\core\utils\DateUtils.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\core\utils\Utils.java
+C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\core\data\Paging.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\core\data\Response.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\security\users\UserRepository.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\core\data\AuditDetails.java
@@ -27,4 +26,5 @@ C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\core\da
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\security\users\UserController.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\core\data\BaseEntityListener.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\core\data\MessageType.java
+C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\core\data\PageSearch.java
 C:\Users\ARINZE\Documents\IdeaProjects\tinyurl\src\main\java\com\tinyurl\security\auth\AuthResponse.java
