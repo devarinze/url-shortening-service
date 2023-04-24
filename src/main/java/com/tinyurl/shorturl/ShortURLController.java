@@ -1,5 +1,6 @@
 package com.tinyurl.shorturl;
 
+import com.tinyurl.core.data.PageSearch;
 import com.tinyurl.core.data.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -13,13 +14,18 @@ public class ShortURLController {
     @Autowired
     private ShortURLService shortURLService;
 
-    @GetMapping("/create")
-    public Response create(@RequestParam("redirectLink") String redirectLink, @RequestParam(value = "customURLKey", required = false) String customURLKey) throws Exception {
-        if (!StringUtils.hasLength(customURLKey)) {
-            return Response.of(shortURLService.createShortURL(redirectLink));
+    @PostMapping("/create")
+    public Response create(@RequestBody ShortURL shortURL) throws Exception {
+        if (!StringUtils.hasLength(shortURL.getUrlKey())) {
+            return Response.of(shortURLService.createShortURL(shortURL));
         } else {
-            return Response.of(shortURLService.createShortURL(redirectLink, customURLKey));
+            return Response.of(shortURLService.createShortURLWithAlias(shortURL));
         }
+    }
+
+    @PostMapping("/all")
+    public Response getShortURLs(@RequestBody PageSearch<ShortURL> ps) {
+        return Response.of(shortURLService.getShortURLsByUsername(ps));
     }
 
     @GetMapping("/redirect-link")

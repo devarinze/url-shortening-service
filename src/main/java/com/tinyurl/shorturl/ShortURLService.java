@@ -1,22 +1,19 @@
 package com.tinyurl.shorturl;
 
-import com.tinyurl.click.Click;
-import com.tinyurl.click.ClickRepository;
+import com.tinyurl.core.data.PageSearch;
 import com.tinyurl.security.auth.AuthService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.SecureRandom;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-
-import static com.tinyurl.core.utils.DateUtils.localDateToDate;
 
 @Transactional
 @Service
@@ -24,36 +21,27 @@ public class ShortURLService {
 
     @Autowired
     ShortURLRepository shortURLRepository;
-    @Autowired
-    ClickRepository clickRepository;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * creates a unique url key for a given link. the custom url consists of this unique key and the subdomain
-     * if the same user provides the same link, the same key is returned
      */
-    public ShortURL createShortURL(String redirectLink) {
+    public ShortURL createShortURL(ShortURL shortURL) {
         String userName = AuthService.currentAuditDetails().getUserName();
-        ShortURL found = shortURLRepository.findByCreatedByAndRedirectLinkAndCustomized(userName, redirectLink, false);
-        if (found == null) {
-            ShortURL shortURL = new ShortURL(redirectLink, userName);
-            addURLKey(shortURL);
-            return (shortURLRepository.save(shortURL));
-        } else {
-            return found;
-        }
+        shortURL.setCreatedBy(userName);
+        addURLKey(shortURL);
+        return shortURLRepository.save(shortURL);
     }
 
     /**
      * custom urls consist of the subdomain (e.g 'localhost:4200') and a custom alias provided by the user
      * custom url keys are generated even if the same user provides the same link but with a different alias
      */
-    public ShortURL createShortURL(String redirectLink, String customURLKey) throws Exception {
+    public ShortURL createShortURLWithAlias(ShortURL shortURL) throws Exception {
         String userName = AuthService.currentAuditDetails().getUserName();
-        ShortURL found = shortURLRepository.findByUrlKey(customURLKey);
+        ShortURL found = shortURLRepository.findByUrlKey(shortURL.getUrlKey());
         if (found == null) {
-            ShortURL shortURL = new ShortURL(redirectLink, userName);
-            shortURL.setUrlKey(customURLKey);
+            shortURL.setCreatedBy(userName);
             shortURL.setCustomized(true);
             return shortURLRepository.save(shortURL);
         } else {
@@ -71,28 +59,23 @@ public class ShortURLService {
         }
     }
 
-    public String getRedirectLink(String urlKey) throws Exception {
-        ShortURL shortURL = shortURLRepository.findByUrlKey(urlKey);
-        if (shortURL != null) {
-            createClick(urlKey);
-            return shortURL.getRedirectLink();
-        } else {
-            throw new Exception("URL not found");
-        }
+    public Page<ShortURL> getShortURLsByUsername(PageSearch<ShortURL> ps) {
+        String userName = AuthService.currentAuditDetails().getUserName();
+        ps.getPage().setOrder("-createDate");
+        return shortURLRepository.findByCreatedBy(userName, ps.getPage().pageRequest());
     }
 
     /**
-     * when any generated link is visited, the number of clicks for that day are updated
+     * when any generated link is visited, the number of clicks are updated
      */
-    public void createClick(String urlKey) {
-        Click found = clickRepository.findByUrlKeyAndCreateDateDay(urlKey, new Date());
-        if (found == null) {
-            Click click = new Click(urlKey);
-            clickRepository.save(click);
+    public String getRedirectLink(String urlKey) throws Exception {
+        ShortURL shortURL = shortURLRepository.findByUrlKey(urlKey);
+        if (shortURL != null) {
+            Long total = shortURL.getClicks();
+            shortURL.setClicks(++(total));
+            return shortURLRepository.save(shortURL).getRedirectLink();
         } else {
-            int total = found.getDailyTotal();
-            found.setDailyTotal(++total);
-            clickRepository.save(found);
+            throw new Exception("URL not found");
         }
     }
 
@@ -104,11 +87,10 @@ public class ShortURLService {
     @Scheduled(cron = "${expired.urls.expression}")
     public void deleteExpiredURLs() {
         logger.info("Deleting expired urls");
-        Date date = localDateToDate(LocalDate.now().minusYears(1));
-        List<ShortURL> expiredURLs = shortURLRepository.findAllByCreateDateIsLessThanEqual(date);
+        Date date = new Date();
+        List<ShortURL> expiredURLs = shortURLRepository.findAllByExpiredAndExpiryDateIsLessThanEqual(false, date);
         for (ShortURL expiredURL: expiredURLs) {
             expiredURL.setExpired(true);
-            clickRepository.deleteAllByUrlKey(expiredURL.getUrlKey());
         }
         shortURLRepository.saveAll(expiredURLs);
     }

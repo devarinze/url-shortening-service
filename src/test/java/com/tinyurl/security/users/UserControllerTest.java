@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Objects;
+
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
 public class UserControllerTest {
@@ -32,7 +34,7 @@ public class UserControllerTest {
     public void registerUser() throws Exception {
         User user = new User("Jon", "Jones", "jon.jones@localhost", "password");
         this.mockMvc.perform(MockMvcRequestBuilders.post(url.concat("/signup"))
-                        .content(Utils.toJson(user))
+                        .content(Objects.requireNonNull(Utils.toJson(user)))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());

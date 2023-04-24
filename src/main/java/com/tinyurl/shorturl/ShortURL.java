@@ -1,6 +1,5 @@
 package com.tinyurl.shorturl;
 
-import com.tinyurl.click.Click;
 import com.tinyurl.core.data.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,8 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -19,9 +17,10 @@ import java.util.List;
 @Where(clause = "expired = false")
 public class ShortURL extends BaseEntity {
 
-    public ShortURL(String redirectLink, String createdBy) {
+    public ShortURL(String redirectLink, String createdBy, Date expiryDate) {
         this.redirectLink = redirectLink;
         this.createdBy = createdBy;
+        this.expiryDate = expiryDate;
     }
 
     @Column(name="url_key", nullable = false)
@@ -33,9 +32,16 @@ public class ShortURL extends BaseEntity {
     @Column(name="created_by", nullable = false)
     private String createdBy;
 
-    @Column(name = "expired")
-    private Boolean expired = false;
-
     @Column(name = "customized")
     private Boolean customized = false;
+
+    @Column(name = "clicks")
+    private Long clicks = 0L;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="expiry_date", nullable = false)
+    private Date expiryDate;
+
+    @Column(name = "expired")
+    private Boolean expired = false;
 }
