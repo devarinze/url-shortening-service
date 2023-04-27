@@ -27,15 +27,15 @@ public class AuthService {
     @Autowired
     private AuthManager authManager;
 
-    public AuthResponse generateToken(AuthRequest authRequest) throws Exception {
+    public AuthResponse generateToken(AuthRequest authRequest) throws BadCredentialsException {
         try {
             Authentication authentication = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
             );
             User user = (User) authentication.getPrincipal();
             return authenticationSuccess(user);
-        } catch (Exception ex) {
-            throw new BadCredentialsException("Invalid username/password");
+        } catch (BadCredentialsException ex) {
+            throw new BadCredentialsException(ex.getMessage());
         }
     }
 

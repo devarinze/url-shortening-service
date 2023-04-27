@@ -1,6 +1,7 @@
 package com.tinyurl.security.auth;
 
 import com.tinyurl.security.users.User;
+import com.tinyurl.security.users.UserRepository;
 import com.tinyurl.security.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class AuthManager implements AuthenticationProvider {
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
@@ -25,12 +26,13 @@ public class AuthManager implements AuthenticationProvider {
             return a;
         }
         String userName = (String) a.getPrincipal();
+        String password = (String) a.getCredentials();
         logger.info("Authentication for : " + userName);
-        User user = userService.loadUserByUsername(userName);
+        User user = userRepository.findByUserNameAndPassword(userName, password);
         if (user == null) {
-            throw new BadCredentialsException("Invalid username");
+            throw new BadCredentialsException("Invalid username/password");
         }
-        return new UsernamePasswordAuthenticationToken(user, "");
+        return new UsernamePasswordAuthenticationToken(user, password);
     }
 
     @Override
